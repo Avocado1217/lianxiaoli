@@ -1,0 +1,14 @@
+const fs = require('fs');
+const html = fs.readFileSync(__dirname + '/index.html', 'utf8');
+const app = fs.readFileSync(__dirname + '/assets/app.js', 'utf8');
+const ids = new Set();
+html.replace(/id="([^"]+)"/g, (m, a) => { ids.add(a); return m; });
+const used = new Set();
+app.replace(/\$\('([^']+)'\)/g, (m, a) => { used.add(a); return m; });
+const dyn = new Set(['copyBtn', 'applyBtn']);
+const missing = [...used].filter(x => !ids.has(x) && !dyn.has(x));
+console.log('HTML 中 id 数量:', ids.size);
+console.log('app.js 引用 id 数量:', used.size);
+console.log('动态生成(HTML 中不需要):', [...dyn].join(', '));
+console.log('缺失的 id:', missing.length ? missing.join(', ') : '无');
+process.exit(missing.length ? 1 : 0);
