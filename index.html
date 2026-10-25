@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>理小办 · 校园办事卡生成器</title>
+<meta name="description" content="理小办：三智能体接力，把校园规定变成一张能照着做的办事卡。大连理工大学「连小理」新生智能体应用与设计大赛 · 赛道一">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-in">
+    <div class="logo"><span class="logo-mark">办</span>理小办</div>
+    <div class="nav-links">
+      <a href="#how">怎么做的</a>
+      <a href="#console">生成办事卡</a>
+      <a href="#why">为什么分三路</a>
+      <a href="#lib">场景库</a>
+      <a href="#data">效果数据</a>
+    </div>
+    <a class="nav-cta" href="#console">开始体验</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">大连理工大学 · 「连小理」新生智能体应用与设计大赛 · 赛道一</span>
+    <h1>学生不缺信息，<br>缺的是<em>下一步做什么</em></h1>
+    <p class="hero-sub">
+      学校规定本身齐全，但分散在不同文件栏目，还存在校区差异，于是有了二次往返。
+      理小办不做「什么都答」的搜索问答，而让三类智能体各管一段、互不越界地接力，
+      最后收口成一张办事卡：<b>结论先行、步骤可执行、依据可追溯</b>。
+    </p>
+
+    <div class="relay">
+      <div class="relay-step">
+        <div class="rn">1</div><div class="rname">信息智能体</div>
+        <div class="rduty">查得准</div>
+        <div class="rdim">只输出带出处的原始事实</div>
+      </div>
+      <div class="relay-arrow">→</div>
+      <div class="relay-step">
+        <div class="rn">2</div><div class="rname">规划智能体</div>
+        <div class="rduty">排得顺</div>
+        <div class="rdim">只判断依赖与分支</div>
+      </div>
+      <div class="relay-arrow">→</div>
+      <div class="relay-step">
+        <div class="rn">3</div><div class="rname">执行助手</div>
+        <div class="rduty">做得成</div>
+        <div class="rdim">只补齐入口地点材料注意</div>
+      </div>
+      <div class="relay-arrow">→</div>
+      <div class="relay-step out">
+        <div class="rn">4</div><div class="rname">理小办 收口</div>
+        <div class="rduty">输出办事卡</div>
+        <div class="rdim">结论 / 步骤 / 依据</div>
+      </div>
+    </div>
+
+    <div class="hero-note">一句话主张：不是让 AI 替学生搜索信息，而是让 AI 理解学生的目标，帮学生从「不知道怎么办」走到「知道下一步做什么」。</div>
+  </div>
+</header>
+
+<section id="console">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">生成办事卡</div>
+      <h2>用日常语言提问，看三路怎么接力</h2>
+      <p>输入你真正会说的话（比如「校园卡丢了怎么办」），或直接点下方场景。选定校区后，路径里的地点与办公时间会同步变化。</p>
+    </div>
+
+    <div class="console">
+      <div class="panel">
+        <h3>① 说出你的问题</h3>
+        <div class="ask-row">
+          <input id="q" type="text" placeholder="试试输入：校园卡丢了怎么办">
+          <button id="askBtn" class="btn btn-primary">识别</button>
+        </div>
+        <div id="matchHint" class="hint">支持同义与模糊表达；识别后会说明依据你提到的哪个词。</div>
+
+        <div class="divider"></div>
+        <h3>② 选择场景</h3>
+        <div class="sc-now"><b id="scTitle">校园卡丢失与补办</b><span id="scSummary"></span></div>
+        <div id="chips" class="chips"></div>
+
+        <div class="divider"></div>
+        <h3>③ 选择校区</h3>
+        <select id="campus"></select>
+        <p class="hint">校区只影响<b>地点与办公时间</b>，不影响事实与步骤顺序。</p>
+
+        <div class="divider"></div>
+        <h3>④ 回答分支问题</h3>
+        <div id="branches"></div>
+
+        <button id="runBtn" class="btn btn-primary run">生成办事卡</button>
+      </div>
+
+      <div>
+        <div class="panel pipeline">
+          <h3>三路接力过程</h3>
+          <p class="hint">每一步都写明「不做什么」——职责边界，是每一环可单独校准的前提。</p>
+
+          <div class="stage-box pending" id="stageInfo">
+            <div class="stage-head"><span class="sn">①</span><b>信息智能体 · 查得准</b><span class="sd">检索校内规章与办事指南，输出带出处的原始事实</span></div>
+            <div class="stage-body"><div class="wait">等待输入…</div></div>
+          </div>
+
+          <div class="stage-box pending" id="stagePlan">
+            <div class="stage-head"><span class="sn">②</span><b>规划智能体 · 排得顺</b><span class="sd">基于事实判断依赖与分支，排成可执行顺序</span></div>
+            <div class="stage-body"><div class="wait">等待输入…</div></div>
+          </div>
+
+          <div class="stage-box pending" id="stageExec">
+            <div class="stage-head"><span class="sn">③</span><b>执行助手 · 做得成</b><span class="sd">为每步补齐入口、地点、材料与注意</span></div>
+            <div class="stage-body"><div class="wait">等待输入…</div></div>
+          </div>
+
+          <div class="stage-box pending" id="stageMerge">
+            <div class="stage-head"><span class="sn">④</span><b>理小办 · 统一收口</b><span class="sd">合并三路结果，输出办事卡</span></div>
+            <div class="stage-body"><div class="wait">等待输入…</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="cardWrap" class="panel card-panel" style="display:none">
+      <div class="card-actions">
+        <h3 id="cardResultTitle">办事卡</h3>
+        <div>
+          <button id="copyBtn" class="btn-sm">复制为 Markdown</button>
+          <button id="printBtn" class="btn-sm">打印 / 存 PDF</button>
+        </div>
+      </div>
+      <div id="card"></div>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">五步链路</div>
+      <h2>一次完整的办事链路</h2>
+      <p>以「校园卡丢了怎么办」为例：学生用日常语言发问 → 信息智能体检索证件管理办法与一卡通指南 → 规划智能体识别出「挂失 → 补办 → 解挂」的依赖路径 → 执行助手补齐每步入口、地点、材料与注意并覆盖校区差异 → 理小办收口输出办事卡。</p>
+    </div>
+    <div class="chain">
+      <div class="chain-item"><b>日常提问</b><span>"校园卡丢了怎么办"</span></div>
+      <div class="chain-item"><b>命中触发</b><span>识别场景与适用规章</span></div>
+      <div class="chain-item"><b>事实带出处</b><span>每条可回溯到文件与位置</span></div>
+      <div class="chain-item"><b>依赖与分支</b><span>什么必须先做、什么可跳过</span></div>
+      <div class="chain-item"><b>执行字段补齐</b><span>入口 / 地点 / 材料 / 注意</span></div>
+      <div class="chain-item"><b>办事卡</b><span>结论先行，照做即可</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">为什么分三路</div>
+      <h2>职责分离，是为了不让任何一环臆测</h2>
+      <p>单一智能体既查又排又填，容易在"顺手补全"时生成看起来合理、实则没有出处的内容。分离之后，每一环都能单独校准。</p>
+    </div>
+    <div class="cmp2">
+      <div class="cmp2-col bad">
+        <h4>单智能体一步到位</h4>
+        <ul>
+          <li>检索、规划、填写混在一次生成里</li>
+          <li>遇到信息缺口会"顺手补一句"，无出处</li>
+          <li>步骤顺序与执行细节相互干扰</li>
+          <li>出错后难以定位是哪一环的问题</li>
+        </ul>
+        <div class="cmp2-sum">结果：<b>看起来很完整，但不清楚哪句是原文、哪句是编的。</b></div>
+      </div>
+      <div class="cmp2-col good">
+        <h4>三路分离 + 统一收口</h4>
+        <ul>
+          <li>事实层只看原文，<b>不推断、不给建议</b></li>
+          <li>规划层只排顺序，<b>不填地点、不编材料</b></li>
+          <li>执行层只补字段，<b>不改事实、不改顺序</b></li>
+          <li>收口时合并，每条结论都能追到依据</li>
+        </ul>
+        <div class="cmp2-sum">结果：<b>不确定的地方被显式标出来，而不是被补全。</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="lib" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">场景库</div>
+      <h2>同一个架构，换三样东西换一个场景</h2>
+      <p>架构与输出格式不变，迁移新场景只需替换三处配置。下列场景均已在本演示中按同一套结构实现。</p>
+    </div>
+    <div class="grid-3" id="libList"></div>
+
+    <h3 class="sub-h">迁移三步</h3>
+    <div class="grid-3" id="migrateList"></div>
+  </div>
+</section>
+
+<section id="data">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">效果数据</div>
+      <h2>未测不填估算值</h2>
+      <p>按项目承诺：实测数据将在实跑回收问卷后填入。以下四项全部保持空白，不做任何预估。</p>
+    </div>
+    <div class="metrics" id="metricList"></div>
+    <div class="notice">真实测试方法：招募在校同学，用真实校园事项实跑，记录获取时长、跑腿次数、一次问清率，并对每条「待核实」内容的准确性逐条人工核对。所有结果如实呈现，包括负面结果。</div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">使用边界</div>
+      <h2>这个演示不做什么</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card"><h3>不代办、不认定</h3><p>只整理公开规章与示例流程，不代替学校办理或审批任何事项，不提供学籍、成绩、财务结果类结论。</p></div>
+      <div class="card"><h3>不编造规定</h3><p>凡文档未写明的一律标 <span class="tag tag-todo">待核实</span>，归入「使用前必须先确认」清单并注明确认渠道。</p></div>
+      <div class="card"><h3>不处理个人信息</h3><p>演示不收集、不上传任何信息；实际使用时不得输入身份证号、账号密码、家庭信息等敏感内容。</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div><b>理小办</b> · 校园办事卡生成器</div>
+      <div style="margin-top:6px">参赛团队：学语文不烧心队　成员：张奥婷、高新策</div>
+      <div style="margin-top:6px">大连理工大学「连小理」新生智能体应用与设计大赛 · 赛道一</div>
+    </div>
+    <div>
+      <div><b>诚实边界</b></div>
+      <div style="margin-top:6px">校内规定、地点、时间、费用均为示例或占位 [待核实]，以学校官方渠道为准。本页为项目演示，不代表学校办理结果。</div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
